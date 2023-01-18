@@ -1,5 +1,7 @@
 import pygame
+import math
 import random
+from pygame import mixer
 
 # Initializing Pygame
 pygame.init()
@@ -8,6 +10,11 @@ pygame.init()
 screen = pygame.display.set_mode((800, 600))
 # Bckground
 background = pygame.image.load("background.jpg")
+
+# Background Sound
+mixer.music.load('background.wav')
+mixer.music.play(-1)
+
 # Title, icon
 pygame.display.set_caption("Germ Kill")
 icon = pygame.image.load("vaccine.png")
@@ -20,11 +27,21 @@ playerY = 520  # 480 -->good too
 playerX_change = 0;
 
 # Enemy
-enemyImg = pygame.image.load("enemy.png")
-enemyX = random.randint(0, 800)
-enemyY = random.randint(50, 150)  # 480 -->good too
-enemyX_change = 0.3
-enemyY_change = 40
+enemyImg = []
+enemyX = []
+enemyY = []
+enemyX_change = []
+enemyY_change = []
+num_of_enemies = 8
+
+for i in range(num_of_enemies):
+    enemyImg.append(pygame.image.load("enemy.png"))
+    enemyX.append(random.randint(0, 735))
+    enemyY.append(random.randint(50, 150)) # 480 -->good too
+    enemyX_change.append(0.3)
+    enemyY_change.append(40)
+
+
 
 # Injection Drop
 # Enemy
@@ -35,6 +52,23 @@ dropX_change = 0
 dropY_change = 5  # 10 # as player is also at 520
 drop_state = "ready"  # Ready -> you cannot see the drop on the screen,Shoot -> the drop will be moving
 
+#score
+score = 0
+font = pygame.font.Font('freesansbold.ttf',32)
+
+textX = 10
+textY = 10
+
+#Game over text
+over_font = pygame.font.Font('freesansbold.ttf',64)
+
+def show_score(x,y):
+    score_value = font.render("Score: " + str(score),True,(255,255,255))
+    screen.blit(score_value, (x, y))
+
+def game_over_text():
+    over_text = over_font.render("GAME OVER", True, (255, 255, 255))
+    screen.blit(over_text, (200, 250))
 
 def player(x, y):
     screen.blit(playerImg, (x, y))  # blit basically means to draw
@@ -42,8 +76,8 @@ def player(x, y):
 
 # Game loop {anything I want to be consistently shown while running the game goes to the while loop}
 
-def enemy(x, y):
-    screen.blit(enemyImg, (x, y))
+def enemy(x, y, i):
+    screen.blit(enemyImg[i], (x, y))
 
 
 def shoot_drop(x, y):
@@ -51,8 +85,15 @@ def shoot_drop(x, y):
     drop_state = "shoot"
     screen.blit(dropImg, (x + 16, y + 10))
 
+def isCrash(enemyX, enemyY, dropX, dropY):
+    distance = math.sqrt(math.pow(enemyX-dropX,2)+math.pow(enemyY-dropY,2))
+    if distance < 27:
+        return True
+    else:
+        return False
 
 running = True
+
 while running:
 
     screen.fill((0, 0, 0))
@@ -70,6 +111,10 @@ while running:
             if event.key == pygame.K_SPACE:
                 # get the current state coordinate of the doctor
                 if drop_state == "ready":
+                    drop_sound = mixer.Sound('drop.wav')
+                    drop_sound.play()
+
+
                     dropX = playerX
                     shoot_drop(dropX, dropY)
         if event.type == pygame.KEYUP:  # releasing a keystroke
@@ -85,14 +130,37 @@ while running:
         playerX = 736  # 736 why? Because screen width is 800 and player imae is 64 pixels and hece 800 - 64 = 736
 
     # germ will move
-    enemyX += enemyX_change
+    for i in range(num_of_enemies):
+        #Game Over
+        if enemyY[i] > 460:
+            for j in range(num_of_enemies):
+                enemyY[j] = 2000
+            game_over_text()
+            break
 
-    if enemyX <= 0:
-        enemyX_change = 0.3
-        enemyY += enemyY_change
-    elif enemyX >= 736:
-        enemyX_change = -0.3
-        enemyY += enemyY_change
+
+        enemyX[i] += enemyX_change[i]
+
+        if enemyX[i] <= 0:
+            enemyX_change[i] = 0.3
+            enemyY[i] += enemyY_change[i]
+        elif enemyX[i] >= 736:
+            enemyX_change[i] = -0.3
+            enemyY[i] += enemyY_change[i]
+
+            # Crash
+        crash = isCrash(enemyX[i], enemyY[i], dropX, dropY)
+        if crash:
+            killed_sound = mixer.Sound('killed.wav')
+            killed_sound.play()
+            dropY = 520
+            drop_state = "ready"
+            score += 1
+            print(score)
+            enemyX[i] = random.randint(0, 735)
+            enemyY[i] = random.randint(50, 150)
+
+        enemy(enemyX[i], enemyY[i], i)
 
     # Drop Movement
     if dropY <= 0:
@@ -102,6 +170,9 @@ while running:
         shoot_drop(dropX, dropY)
         dropY -= dropY_change
 
+
+
+
     player(playerX, playerY)
-    enemy(enemyX, enemyY)
+    show_score(textX,textY)
     pygame.display.update()  # init,update is always gonna be there since it updates the game window
