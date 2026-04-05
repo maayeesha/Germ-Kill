@@ -100,3 +100,13 @@ Perfect for:
 ```bash
 git clone https://github.com/maayeesha/Germ-Kill.git
 cd Germ-Kill
+```
+2. **Install Pygame:**
+```bash
+pip install pygame ```
+3. **Run the game:**
+```
+bash
+python main.py
+That's it! The game should launch in a new window! 🎮
+``
