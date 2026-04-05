@@ -8,7 +8,7 @@
 ![Library](https://img.shields.io/badge/Library-Pygame-green)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
-[Demo](#https://www.linkedin.com/posts/maayeeshafarzana_python-pythonprogramming-pygame-activity-6668956772923006976-CT4Y?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAAC3EW60B509STSsDfFiY7W8a9nOzGtg5eMo) 
+[Demo](#-https://www.linkedin.com/posts/maayeeshafarzana_python-pythonprogramming-pygame-activity-6668956772923006976-CT4Y?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAAC3EW60B509STSsDfFiY7W8a9nOzGtg5eMo) 
 
 </div>
 
