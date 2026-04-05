@@ -103,7 +103,8 @@ cd Germ-Kill
 ```
 2. **Install Pygame:**
 ```bash
-pip install pygame ```
+pip install pygame 
+```
 3. **Run the game:**
 ```
 bash
