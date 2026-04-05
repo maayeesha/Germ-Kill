@@ -106,8 +106,7 @@ cd Germ-Kill
 pip install pygame 
 ```
 3. **Run the game:**
-```
-bash
+```bash
 python main.py
+```
 That's it! The game should launch in a new window! 🎮
-``
