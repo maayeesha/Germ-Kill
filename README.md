@@ -86,3 +86,17 @@ Perfect for:
 - `drop.wav` → Sound effect  
 - `killed.wav` → Enemy death sound  
 - `.idea/` → IDE configuration (PyCharm)  
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Python 3.6 or higher
+- pip (Python package manager)
+
+### Installation
+
+1. **Clone the repository:**
+```bash
+git clone https://github.com/maayeesha/Germ-Kill.git
+cd Germ-Kill
